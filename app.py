@@ -90,6 +90,8 @@ def process_command():
         
     if 'translate' in command.split():
         return jsonify({'response': command_translate_text(command)})
+    if 'convert' in command:
+        return jsonify({'response': command_currency_conversion(command)})
  
     return jsonify({'response': "Please provide a valid input"})
 
@@ -404,5 +406,50 @@ def command_translate_text(command):
         return f'Translation from {source_language} to {target_language} is {translation}'
     except Exception as e:
         return f"An error occurred during translation: {str(e)}"
+def get_currency_exchange_rate(api_key, base_currency, target_currency):
+    url = f"https://open.er-api.com/v6/latest/{base_currency}"
+    params = {"apikey": api_key}
+    
+    response = requests.get(url, params=params)
+
+    if response.status_code == 200:
+        data = response.json()
+        exchange_rate = data["rates"].get(target_currency)
+        if exchange_rate:
+            return exchange_rate
+        else:
+            return None
+    else:
+        return None
+
+def convert_currency(api_key, amount, base_currency, target_currency):
+    exchange_rate = get_currency_exchange_rate(api_key, base_currency, target_currency)
+    
+    if exchange_rate is not None:
+        converted_amount = amount * exchange_rate
+        return f"{amount} {base_currency} is equal to {converted_amount:.2f} {target_currency}"
+    else:
+        return "Failed to retrieve exchange rate. Please check your currencies and try again."
+
+def command_currency_conversion(command):
+    try:
+        if len(command.split()) != 6:
+            raise ValueError("Please provide input in the form of convert amount from base currency to target currency .")
+        _, amount_str, _, from_currency, _, to_currency = command.split()
+        
+        
+        amount_str = amount_str.replace(',', '')
+        
+        
+        amount = float(amount_str)
+        
+        
+        api_key = "642bedc531df7d7047afdd56"
+        
+        result = convert_currency(api_key, amount, from_currency.upper(), to_currency.upper())
+        return result
+    except Exception as e:
+        return f"{str(e)}"
+        
 if __name__ == '_main_':
     app.run(debug=True)
