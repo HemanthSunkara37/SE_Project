@@ -12,6 +12,7 @@ from validate_email_address import validate_email
 from email.message import EmailMessage
 import ssl
 import smtplib
+from translate import Translator
 from PyMultiDictionary import MultiDictionary
 dictionary = MultiDictionary()
 
@@ -83,9 +84,12 @@ def process_command():
         return jsonify({'response': get_meaning(command)})
     if 'email' in command.split():
         print(command)
+        return jsonify({'response': command_send_email(command)})
     if 'define' in command:
         return jsonify({'response': get_meaning(command)})
-        return jsonify({'response': command_send_email(command)})
+        
+    if 'translate' in command.split():
+        return jsonify({'response': command_translate_text(command)})
  
     return jsonify({'response': "Please provide a valid input"})
 
@@ -381,5 +385,24 @@ def get_weather(data):
     )['current']['weather_descriptions'][0]
 
     return f"Current weather in {location}: is {weather_descriptions} and {temperature} degrees Celsius."
+
+def command_translate_text(command):
+    # Assuming the user says "Translate <text> from <source_language> to <target_language>"
+    
+    try:
+        text_to_translate = command.split(
+            'from')[0].replace('translate', '').strip()
+        print(text_to_translate)
+        source_language = command.split('from')[1].split('to')[0].strip()
+        target_language = command.split('to')[1].strip()
+
+        translator = Translator(to_lang=target_language,
+                                from_lang=source_language)
+        translation = translator.translate(text_to_translate)
+        print(translation)
+
+        return f'Translation from {source_language} to {target_language} is {translation}'
+    except Exception as e:
+        return f"An error occurred during translation: {str(e)}"
 if __name__ == '_main_':
     app.run(debug=True)
