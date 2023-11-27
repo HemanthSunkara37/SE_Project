@@ -1,0 +1,14 @@
+flask
+render_template
+send_from_directory
+validate_email_address
+request
+jsonify
+pywhatkit
+requests
+wikipedia
+translate
+geopy
+email
+PyMultiDictionary
+wikipedia
