@@ -1,10 +1,13 @@
 import datetime
 import re
 from validate_email_address import validate_email
-from flask import Flask, request, jsonify, render_template, send_from_directory
+from flask import Flask, jsonify, render_template, send_from_directory,request
 import pywhatkit
 import requests
 import wikipedia
+import nltk
+from nltk.corpus import wordnet
+nltk.download('omw-1.4')
 import pyjokes
 import pytz
 import docx2txt
@@ -142,11 +145,12 @@ def get_youtube_video_id(command):
     return video_id
 
 
+
 def command_get_current_time():
-    try:
+   try:
      time = datetime.datetime.now().strftime('%I:%M %p')
      return f"The current time is {time}"
-    except Exception as e:
+   except Exception as e:
         return f"An error occurred: {str(e)}"
 
 
@@ -419,22 +423,21 @@ def get_weather(data):
     return f"Current weather in {location}: is {weather_descriptions} and {temperature} degrees Celsius."
 
 def get_meaning(command):
-    
     if command.lower().startswith('define '):
-        
         word_to_define = command[7:].strip()
 
-        
-        meaning_result = dictionary.meaning('en', word_to_define)
+        synsets = wordnet.synsets(word_to_define)
 
-        if meaning_result:
-           
-            word_type, word_meaning, _ = meaning_result
+        if synsets:
+            # Get the first synset (usually the most common meaning)
+            synset = synsets[0]
+            word_type = synset.pos()
+            word_meaning = synset.definition()
 
-            
-            meaning = f'{word_to_define.capitalize()} ({word_meaning} '
+            meaning = f'{word_to_define.capitalize()} is: {word_meaning}'
             return meaning
-        
+        else:
+            return f'Meaning not found for {word_to_define}'
     else:
         return 'Invalid command. Please use the format: Define [word]'
     
