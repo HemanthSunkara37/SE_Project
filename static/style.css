@@ -1,34 +1,36 @@
+
 .center-text1 {
     background-color: #DCDCDC; 
     color: black;
     text-align: center;
     padding: 10px;
 }
+
 #heading1 {
     font-size: 30px;
     color: white;
     background-color: #4CAF50;
-    padding: 20px;
+    padding-top: 20px;
     margin: 0;
     text-transform: uppercase;
     background-image: linear-gradient(
-      -225deg,
-      #231557 0%,
-      #1e107a 29%,
-      #1e107a 67%,
-      #231557 100%
+        -225deg,
+        #231557 0%,
+        #1e107a 29%,
+        #1e107a 67%,
+        #231557 100%
     );
-    background-size: auto auto;
-    background-clip: border-box;
-    background-size: 100% auto;
+    
     color: #fff;
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: textclip 2s linear infinite;
-        font-size: 130px;
-  }
-  #chatContainer {
+    font-size: 100px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#chatContainer {
     text-align: center;
 }
 
@@ -38,7 +40,6 @@
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 20px;
-    
 }
 
 .userCommand {
@@ -60,15 +61,15 @@
     border-radius: 15px;
     align-self: flex-end;
 }
-#chathistory
-{
+
+#chathistory {
     font-size: 18px; 
     margin-top: 10px; 
     padding: 50px; 
     overflow-y: scroll; 
     max-height: 500px;
-    
 }
+
 #record {
     color: white;
     background-color: #3498db;
@@ -76,6 +77,22 @@
     padding: 10px;
     border-radius: 8px;
     border: none;
+}
 
+
+
+.img {
+    width: 100px;
+    border-radius: 50%;
+    margin-bottom:3px;
+}
+#heading3
+{
+    font: size 20px;
+    color:#3498db;
+}
+#yellow
+{
+    background-color: #FFFFE0;
 }
 
